@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @boiler.name %>
+</p>
+
+<p>
+  <b>API:</b>
+  <%= @boiler.api %>
+</p>
+
+<table>
+  <thead>
+	<tr>
+		<th>Path</th>
+		<th>Value</th>
+	</tr>
+  </thead>
+  <tbody>
+	<% @boiler.mappings.each do |mapping| %>
+      <tr>
+	    <td><%= mapping.path %></td>
+	    <td><%= mapping.getFormattedValue %></td>
+	  </tr>
+	<% end %>
+  </tbody>
+</table>
+<br />
+<%= link_to 'Edit', edit_boiler_path(@boiler) %> |
+<%= link_to 'Back', boilers_path %>

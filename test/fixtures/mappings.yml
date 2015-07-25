@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  path: MyString
+  uri: MyString
+  datatype: MyString
+
+two:
+  path: MyString
+  uri: MyString
+  datatype: MyString

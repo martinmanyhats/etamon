@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Boilers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Address</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @boilers.each do |boiler| %>
+      <tr>
+      	<td><%= boiler.name %></td>
+      	<td><%= "#{boiler.ipaddress}:#{boiler.port}" %></td>
+        <td><%= link_to 'Show', boiler %></td>
+        <td><%= link_to 'Edit', edit_boiler_path(boiler) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Boiler', new_boiler_path %>
