@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   
+  resources :datalogs
   resources :boilers do
     resources :mappings
     resources :vars

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150726142108) do
+ActiveRecord::Schema.define(version: 20150726192527) do
 
   create_table "Mappings_Vars", id: false, force: :cascade do |t|
     t.integer "mapping_id", null: false
@@ -30,6 +30,16 @@ ActiveRecord::Schema.define(version: 20150726142108) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
+
+  create_table "datalogs", force: :cascade do |t|
+    t.integer  "boiler_id"
+    t.text     "values"
+    t.text     "errors"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "datalogs", ["boiler_id"], name: "index_datalogs_on_boiler_id"
 
   create_table "mappings", force: :cascade do |t|
     t.integer  "boiler_id",                null: false

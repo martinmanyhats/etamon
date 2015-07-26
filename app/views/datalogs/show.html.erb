@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Boiler:</strong>
+  <%= @datalog.boiler %>
+</p>
+
+<p>
+  <strong>Values:</strong>
+  <%= @datalog.values %>
+</p>
+
+<%= link_to 'Edit', edit_datalog_path(@datalog) %> |
+<%= link_to 'Back', datalogs_path %>

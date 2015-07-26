@@ -5,9 +5,9 @@ class Mapping < ActiveRecord::Base
   
   default_scope { order('path ASC') }
   
-  def getFormattedValue
-    Rails.logger.debug("!! getValue: #{path}")
-    v = getValue
+  def get_formatted_value
+    Rails.logger.debug("!! get_formatted_value: #{path}")
+    v = get_value
     case datatype
     when 'p'
     else
@@ -15,8 +15,8 @@ class Mapping < ActiveRecord::Base
     end
   end
   
-  def getValue
-    boiler.getVarWithURI(uri)
+  def get_value
+    boiler.get_value_with_URI(uri)
   end
   
 end
