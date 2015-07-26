@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  varNames: MyString
+  boiler: 
+  lastSetDate: MyString
+
+two:
+  name: MyString
+  varNames: MyString
+  boiler: 
+  lastSetDate: MyString

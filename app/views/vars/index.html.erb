@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Vars</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Boiler</th>
+      <th>Last Set Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vars.each do |var| %>
+      <tr>
+        <td><%= var.name %></td>
+        <td><%= var.boiler.name %></td>
+        <td><%= var.last_set_date %></td>
+        <td><%= link_to 'Show', boiler_var_path(@boiler, var) %></td>
+        <td><%= link_to 'Edit', edit_boiler_var_path(@boiler, var) %></td>
+        <td><%= link_to 'Destroy', [@boiler, var], method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Var', new_boiler_var_path(@boiler) %>

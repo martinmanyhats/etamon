@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150725210534) do
+ActiveRecord::Schema.define(version: 20150726142108) do
+
+  create_table "Mappings_Vars", id: false, force: :cascade do |t|
+    t.integer "mapping_id", null: false
+    t.integer "var_id",     null: false
+  end
+
+  add_index "Mappings_Vars", ["mapping_id", "var_id"], name: "index_Mappings_Vars_on_mapping_id_and_var_id"
+  add_index "Mappings_Vars", ["var_id", "mapping_id"], name: "index_Mappings_Vars_on_var_id_and_mapping_id"
 
   create_table "boilers", force: :cascade do |t|
     t.string   "name",                      null: false
@@ -31,5 +39,16 @@ ActiveRecord::Schema.define(version: 20150725210534) do
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
+
+  create_table "vars", force: :cascade do |t|
+    t.string   "name"
+    t.text     "uri_list"
+    t.integer  "boiler_id"
+    t.datetime "last_set_date"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "vars", ["boiler_id"], name: "index_vars_on_boiler_id"
 
 end

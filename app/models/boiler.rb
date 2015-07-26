@@ -1,6 +1,7 @@
 class Boiler < ActiveRecord::Base
   
   has_many :mappings, dependent: :destroy
+  has_many :vars, dependent: :destroy
   
   def api
     response = RestClient.get "http://#{ipaddress}:#{port}/user/api"

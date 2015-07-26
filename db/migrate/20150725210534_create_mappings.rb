@@ -4,7 +4,8 @@ class CreateMappings < ActiveRecord::Migration
       t.integer :boiler_id, null: false
       t.string :path, null: false
       t.string :uri, null: false
-      t.string :datatype, null: false, default: 's'
+      t.string :datatype, null: false, default: 'i'
+      t.references :mappings_vars
 
       t.timestamps null: false
     end

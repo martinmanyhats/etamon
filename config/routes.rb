@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   
   resources :boilers do
     resources :mappings
+    resources :vars
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
