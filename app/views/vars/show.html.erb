@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Boiler:</strong>
+  <%= @var.boiler.name %>
+</p>
+
+<p>
   <strong>Name:</strong>
   <%= @var.name %>
 </p>
@@ -11,8 +16,8 @@
 </p>
 
 <p>
-  <strong>Boiler:</strong>
-  <%= @var.boiler.name %>
+  <strong>Actual:</strong>
+  <%= @var.boiler.get_var_mappings(@var).map {|m| m.path}.join(', ') %>
 </p>
 
 <p>

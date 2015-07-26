@@ -72,21 +72,37 @@ class Boiler < ActiveRecord::Base
     end
   end
   
-  def set_var(var)
+  def update_var(var)
     create_var(var) unless var!(var)
+    current_mappings = get_var_mappings(var)
+    # Work out the changes we need to make.
+    (var.mappings - current_mappings).each {|m| add_mapping_for_var(m, var)}
+    (current_mappings - var.mappings).each {|m| remove_mapping_for_var(m, var)}
+ end
+  
+  def add_mapping_for_var(mapping, var)
+    Rails.logger.debug("!! add_mapping_to_var #{mapping.path} #{var.name}")
   end
   
-  def get_var(var)
-    Rails.logger.debug("!! get_var #{var.inspect}")
+  def remove_mapping_for_var(mapping, var)
+    Rails.logger.debug("!! remove_mapping_for_var #{mapping.path} #{var.name}")
+  end
+  
+  def get_var_mappings(var)
+    Rails.logger.debug("!! get_var_mappings #{var.inspect}")
     begin
       response = RestClient.get(url("/user/vars/#{var.name}"))
       if response.code != 200
-        Rails.logger.debug(">> get_var code #{response.code}")
-        return "FAIL"
+        Rails.logger.debug(">> get_var_mappings code #{response.code}")
+        return array('FAIL')
       end
+      result = Nokogiri::HTML(response.to_str)
+      Rails.logger.debug("!! get_var_mappings result #{result.inspect}")
+      return result.xpath('//variable/@uri').map {|n| Mapping.find_by(uri: n.value)}
     rescue => e
-      Rails.logger.debug(">> get_var exception #{e.inspect}")
+      Rails.logger.debug(">> get_var_mappings exception #{e.inspect}")
     end
+    return array('FAIL')
   end
   
   def url(path)

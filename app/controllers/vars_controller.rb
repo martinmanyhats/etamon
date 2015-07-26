@@ -45,7 +45,7 @@ class VarsController < ApplicationController
   def update
     respond_to do |format|
       if @var.update(var_params)
-        @boiler.set_var(@var)
+        @boiler.update_var(@var)
         format.html { redirect_to [@boiler, @var], notice: 'Var was successfully updated.' }
         format.json { render :show, status: :ok, location: @var }
       else
