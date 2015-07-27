@@ -17,7 +17,7 @@
 
 <p>
   <strong>Actual:</strong>
-  <%= @var.boiler.get_var_mappings(@var).map {|m| m.path}.join(', ') %>
+  <%= @var.get_varset_mappings.map {|m| m.path}.join(', ') %>
 </p>
 
 <p>

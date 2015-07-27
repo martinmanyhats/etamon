@@ -30,7 +30,7 @@ class VarsController < ApplicationController
 
     respond_to do |format|
       if @var.save
-        @boiler.set_var(@var)
+        @var.create_varset
         format.html { redirect_to [@boiler, @var], notice: 'Var was successfully created.' }
         format.json { render :show, status: :created, location: @var }
       else
@@ -45,7 +45,7 @@ class VarsController < ApplicationController
   def update
     respond_to do |format|
       if @var.update(var_params)
-        @boiler.update_var(@var)
+        @var.update_varset
         format.html { redirect_to [@boiler, @var], notice: 'Var was successfully updated.' }
         format.json { render :show, status: :ok, location: @var }
       else
@@ -58,7 +58,7 @@ class VarsController < ApplicationController
   # DELETE /vars/1
   # DELETE /vars/1.json
   def destroy
-    @boiler.destroy_var(@var)
+    @var.destroy_varset
     @var.destroy
     respond_to do |format|
       format.html { redirect_to boiler_vars_url, notice: 'Var was successfully destroyed.' }

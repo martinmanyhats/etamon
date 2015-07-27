@@ -29,6 +29,7 @@ class Boiler < ActiveRecord::Base
     result.at_xpath('//eta/value/@strvalue')
   end
   
+=begin
   def var!(var)
     Rails.logger.debug("!! var! #{var.inspect}")
     begin
@@ -82,6 +83,7 @@ class Boiler < ActiveRecord::Base
   
   def add_mapping_for_var(mapping, var)
     Rails.logger.debug("!! add_mapping_to_var #{mapping.path} #{var.name}")
+    
   end
   
   def remove_mapping_for_var(mapping, var)
@@ -104,7 +106,8 @@ class Boiler < ActiveRecord::Base
     end
     return array('FAIL')
   end
-  
+=end
+
   def url(path)
     "http://#{ipaddress}:#{port}#{path}"
   end
