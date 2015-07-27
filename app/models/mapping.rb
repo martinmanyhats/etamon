@@ -9,7 +9,12 @@ class Mapping < ActiveRecord::Base
     Rails.logger.debug("!! get_formatted_value: #{path}")
     v = get_value
     case datatype
-    when 'p'
+    when 'C'
+      "#{v} °C"
+    when 'k'
+      "#{v} kg"
+    when '%'
+      "#{v} %"
     else
       v.to_s
     end

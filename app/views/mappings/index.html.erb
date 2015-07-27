@@ -8,6 +8,7 @@
       <th>Path</th>
       <th>Uri</th>
       <th>Datatype</th>
+      <th>Important</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -18,6 +19,7 @@
         <td><%= mapping.path %></td>
         <td><%= mapping.uri %></td>
         <td><%= mapping.datatype %></td>
+        <td><%= mapping.important %></td>
         <td><%= link_to 'Show', boiler_mapping_path(@boiler, mapping) %></td>
         <td><%= link_to 'Edit', edit_boiler_mapping_path(@boiler, mapping) %></td>
         <td><%= link_to 'Destroy', [@boiler, mapping], method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -5,6 +5,11 @@ Rails.application.routes.draw do
     resources :mappings
     resources :vars
   end
+  resources :vars do
+    member do
+      get 'datalog'
+    end
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

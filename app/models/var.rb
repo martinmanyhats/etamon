@@ -3,6 +3,21 @@ class Var < ActiveRecord::Base
   belongs_to :boiler, -> { readonly }
   has_and_belongs_to_many :mappings
   
+  def self.datalog_for_name(name = 'etamon1')
+    Rails.logger.debug("!! datalog_for_name #{name}")
+    var = Var.find_by(name: name)
+    var.datalog
+  end
+  
+  def datalog
+    Rails.logger.debug("!! datalog #{self.inspect}")
+    Datalog.create do |d|
+      d.boiler = boiler
+      d.dataset = get_varset_dataset.json
+      #d.errorset = xxx.json
+    end
+  end
+  
   def varset!
     Rails.logger.debug("!! varset! #{self.inspect}")
     begin
@@ -83,20 +98,33 @@ class Var < ActiveRecord::Base
   end
   
   def get_varset_mappings
-    Rails.logger.debug("!! remove_mapping_from_varset #{self.inspect}")
+    Rails.logger.debug("!! get_varset_mappings #{self.inspect}")
+    get_varset_data.xpath('//variable/@uri').map {|n| Mapping.find_by(uri: n.value)}
+  end
+  
+  def get_varset_dataset
+    Rails.logger.debug("!! get_varset_dataset #{self.inspect}")
+    data = get_varset_data
+    paths = data.xpath('//variable/@uri').map {|n| Mapping.find_by(uri: n.value).path}
+    dataset = data.xpath('//variable/@strvalue').map{|v| v.value}
+    Hash[paths.zip(dataset)]
+  end
+  
+  def get_varset_data
+    Rails.logger.debug("!! get_varset_data #{self.inspect}")
     begin
       response = RestClient.get(boiler.url("/user/vars/#{name}"))
       if response.code != 200
-        Rails.logger.debug(">> get_varset_mappings code #{response.code}")
-        return array('FAIL')
+        Rails.logger.debug(">> get_varset_data code #{response.code}")
+        return {}
       end
       result = Nokogiri::HTML(response.to_str)
-      Rails.logger.debug("!! get_varset_mappings result #{result.inspect}")
-      return result.xpath('//variable/@uri').map {|n| Mapping.find_by(uri: n.value)}
+      Rails.logger.debug("!! get_varset_data result #{result.inspect}")
+      return result
     rescue => e
-      Rails.logger.debug(">> get_varset_mappings exception #{e.inspect}")
+      Rails.logger.debug(">> get_varset_data exception #{e.inspect}")
     end
-    return array('FAIL')
+    return {}
   end
   
   def uris

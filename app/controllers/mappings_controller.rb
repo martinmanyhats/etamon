@@ -77,6 +77,6 @@ class MappingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def mapping_params
-      params.require(:mapping).permit(:path, :uri, :datatype)
+      params.require(:mapping).permit(:path, :uri, :datatype, :important)
     end
 end

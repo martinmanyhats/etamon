@@ -10,6 +10,11 @@
   <%= @boiler.api %>
 </p>
 
+<p>
+	<b>State:</b>
+	<%= @boiler.get_value_with_URI('40/10261/0/0/12000') %>
+</p>
+
 <table>
   <thead>
 	<tr>
@@ -18,7 +23,7 @@
 	</tr>
   </thead>
   <tbody>
-	<% @boiler.mappings.each do |mapping| %>
+	<% @boiler.mappings.select{|m| m.important}.each do |mapping| %>
       <tr>
 	    <td><%= mapping.path %></td>
 	    <td><%= mapping.get_formatted_value %></td>

@@ -5,7 +5,7 @@ class CreateMappings < ActiveRecord::Migration
       t.string :path, null: false
       t.string :uri, null: false
       t.string :datatype, null: false, default: 'i'
-      t.references :mappings_vars
+      t.boolean :important, null: false, default: false
 
       t.timestamps null: false
     end

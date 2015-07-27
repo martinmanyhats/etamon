@@ -1,6 +1,6 @@
 class VarsController < ApplicationController
-  before_action :set_boiler #, only: [:new, :create, :show, :edit, :update, :destroy]
-  before_action :set_var, only: [:show, :edit, :update, :destroy]
+  before_action :set_boiler, except: [:datalog]
+  before_action :set_var, only: [:show, :edit, :update, :destroy, :datalog]
 
   # GET /vars
   # GET /vars.json
@@ -62,6 +62,17 @@ class VarsController < ApplicationController
     @var.destroy
     respond_to do |format|
       format.html { redirect_to boiler_vars_url, notice: 'Var was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+  
+  # GET /vars/1/datalog
+  # GET /vars/1/datalog.json
+  def datalog
+    Rails.logger.debug("!! datalog #{@var.inspect}")
+    @var.datalog
+    respond_to do |format|
+      format.html { render plain: 'OK'}
       format.json { head :no_content }
     end
   end

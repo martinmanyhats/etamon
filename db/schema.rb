@@ -42,17 +42,17 @@ ActiveRecord::Schema.define(version: 20150726192527) do
   add_index "datalogs", ["boiler_id"], name: "index_datalogs_on_boiler_id"
 
   create_table "mappings", force: :cascade do |t|
-    t.integer  "boiler_id",                null: false
-    t.string   "path",                     null: false
-    t.string   "uri",                      null: false
-    t.string   "datatype",   default: "s", null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "boiler_id",                  null: false
+    t.string   "path",                       null: false
+    t.string   "uri",                        null: false
+    t.string   "datatype",   default: "i",   null: false
+    t.boolean  "important",  default: false, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "vars", force: :cascade do |t|
     t.string   "name"
-    t.text     "uri_list"
     t.integer  "boiler_id"
     t.datetime "last_set_date"
     t.datetime "created_at",    null: false
