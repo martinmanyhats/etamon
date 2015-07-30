@@ -13,6 +13,8 @@ class Mapping < ActiveRecord::Base
       "#{v} °C"
     when 'k'
       "#{v} kg"
+    when 'W'
+      "#{v} kW"
     when '%'
       "#{v} %"
     else

@@ -1,3 +1,4 @@
+<% title "Datalog" %>
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -6,8 +7,13 @@
 </p>
 
 <p>
-  <strong>Values:</strong>
-  <%= @datalog.values %>
+  <strong>Data:</strong>
+  <%= @datalog.dataset %>
+</p>
+
+<p>
+  <strong>Errors:</strong>
+  <%= @datalog.errorset %>
 </p>
 
 <%= link_to 'Edit', edit_datalog_path(@datalog) %> |

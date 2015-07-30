@@ -4,7 +4,7 @@ class DatalogsController < ApplicationController
   # GET /datalogs
   # GET /datalogs.json
   def index
-    @datalogs = Datalog.all
+    @datalogs = Datalog.order(created_at: :desc).limit(100)
   end
 
   # GET /datalogs/1

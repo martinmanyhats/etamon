@@ -17,7 +17,7 @@ class Boiler < ActiveRecord::Base
   end
   
   def get_value_with_URI(uri)
-    Rails.logger.debug("!! get_value_with_URI #{uri}")
+    Rails.logger.debug("!! get_value_with_URI #{shortname} #{uri}")
     response = RestClient.get(url("/user/var/#{uri}"))
     if response.code != 200
       Rails.logger.debug(">> get_value_with_URI code #{response.code}")
@@ -27,6 +27,11 @@ class Boiler < ActiveRecord::Base
     Rails.logger.debug("!! get_value_with_URI result #{result.inspect}")
     Rails.logger.debug("!! get_value_with_URI strvalue #{result.at_xpath('//eta/value/@strvalue')}")
     result.at_xpath('//eta/value/@strvalue')
+  end
+  
+  def get_value_with_path(path)
+    Rails.logger.debug("!! get_value_with_path #{shortname} #{path}")
+    get_value_with_URI(mappings.find_by(path: path).uri)
   end
   
   def url(path)

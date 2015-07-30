@@ -85,7 +85,8 @@ class VarsController < ApplicationController
    end
 
    def set_var
-      @var = Var.find(params[:id])
+     @var = Var.find_by(name: params[:id])
+     @var = Var.find(params[:id]) unless @var
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

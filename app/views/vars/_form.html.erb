@@ -1,3 +1,4 @@
+<% title "New Var" %>
 <%= form_for([@boiler, @var]) do |f| %>
   <% if @var.errors.any? %>
     <div id="error_explanation">
@@ -16,7 +17,7 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <% Mapping.all.each do |mapping| %>
+    <% @boiler.mappings.each do |mapping| %>
       <div>
       	<%= check_box_tag "var[mapping_ids][]", mapping.id, @var.mappings.include?(mapping) %>
         <%= mapping.path %>

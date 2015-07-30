@@ -13,15 +13,15 @@ class Var < ActiveRecord::Base
     Rails.logger.debug("!! datalog #{self.inspect}")
     Datalog.create do |d|
       d.boiler = boiler
-      d.dataset = get_varset_dataset.json
-      #d.errorset = xxx.json
+      d.dataset = get_varset_dataset.to_json
+      #d.errorset = xxx.to_json
     end
   end
   
   def varset!
     Rails.logger.debug("!! varset! #{self.inspect}")
     begin
-      response = RestClient.get(url("/user/vars/#{name}"))
+      response = RestClient.get(boiler.url("/user/vars/#{name}"))
       Rails.logger.debug("!! varset! response #{response.inspect}")
       if response.code != 200
         Rails.logger.debug(">> varset! code #{response.code}")
@@ -62,11 +62,16 @@ class Var < ActiveRecord::Base
   end
   
   def update_varset
-    create_varset unless varset!
-    current_mappings = get_varset_mappings
+    destroy_varset
+    create_varset
+    if varset!
+      mappings.each {|m| add_mapping_to_varset(m)}
+    end
+    #create_varset unless varset!
+    #current_mappings = get_varset_mappings
     # Work out the changes we need to make.
-    (mappings - current_mappings).each {|m| add_mapping_to_varset(m)}
-    (current_mappings - mappings).each {|m| remove_mapping_from_varset(m)}
+    #(mappings - current_mappings).each {|m| add_mapping_to_varset(m)}
+    #(current_mappings - mappings).each {|m| remove_mapping_from_varset(m)}
  end
   
   def add_mapping_to_varset(mapping)
@@ -119,7 +124,7 @@ class Var < ActiveRecord::Base
         return {}
       end
       result = Nokogiri::HTML(response.to_str)
-      Rails.logger.debug("!! get_varset_data result #{result.inspect}")
+      #Rails.logger.debug("!! get_varset_data result #{result.inspect}")
       return result
     rescue => e
       Rails.logger.debug(">> get_varset_data exception #{e.inspect}")

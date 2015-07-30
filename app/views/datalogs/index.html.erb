@@ -1,3 +1,4 @@
+<% title "Datalogs" %>
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Datalogs</h1>
@@ -5,6 +6,7 @@
 <table>
   <thead>
     <tr>
+      <th>When</th>
       <th>Boiler</th>
       <th>Values</th>
       <th colspan="3"></th>
@@ -14,8 +16,17 @@
   <tbody>
     <% @datalogs.each do |datalog| %>
       <tr>
-        <td><%= datalog.boiler %></td>
-        <td><%= datalog.values %></td>
+        <td><%= datalog.updated_at.strftime('%F %RZ') %></td>
+        <td><%= datalog.boiler.shortname %></td>
+        <td>
+          <% JSON.parse(datalog.dataset).each do |path, value| %>
+            <div>
+              <%= path %>:
+              <%= value %>
+            </div>
+          <% end %>
+    	</td>
+        <td><%= datalog.errorset %></td>
         <td><%= link_to 'Show', datalog %></td>
         <td><%= link_to 'Edit', edit_datalog_path(datalog) %></td>
         <td><%= link_to 'Destroy', datalog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -23,7 +34,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Datalog', new_datalog_path %>
