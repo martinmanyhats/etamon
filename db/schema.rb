@@ -33,8 +33,8 @@ ActiveRecord::Schema.define(version: 20150726192527) do
 
   create_table "datalogs", force: :cascade do |t|
     t.integer  "boiler_id"
-    t.text     "values"
-    t.text     "errors"
+    t.text     "dataset"
+    t.text     "errorset"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

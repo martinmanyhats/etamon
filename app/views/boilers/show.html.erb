@@ -1,3 +1,4 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
 <% title 'Boiler' %>
 <p id="notice"><%= notice %></p>
 
@@ -32,6 +33,12 @@
 	<% end %>
   </tbody>
 </table>
+<% start_date = 2.week.ago.utc %>
+<%#= line_chart @boiler.datalogs.group("DAY(created_at)").count %>
+<%= line_chart @boiler.datalogs.where('created_at > ?', start_date).map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed']]},
+    library: {title: "Wood pellet consumption (kg)"} %>
+<%= line_chart @boiler.datalogs.where('created_at > ?', start_date).map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status']]},
+    library: {title: "Charge status (%)"} %>
 <br />
 <%= link_to 'Edit', edit_boiler_path(@boiler) %> |
 <%= link_to 'Back', boilers_path %>
