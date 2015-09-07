@@ -118,7 +118,7 @@ class Var < ActiveRecord::Base
   def get_varset_data
     Rails.logger.debug("!! get_varset_data #{self.inspect}")
     begin
-      response = RestClient.get(boiler.url("/user/vars/#{name}"))
+      response = RestClient::Request.execute(method: :get, url: boiler.url("/user/vars/#{name}"), open_timeout: 3, read_timeout: 3)
       if response.code != 200
         Rails.logger.debug(">> get_varset_data code #{response.code}")
         return {}

@@ -5,7 +5,13 @@ class Boiler < ActiveRecord::Base
   has_many :datalogs, dependent: :destroy
   
   def api
-    response = RestClient.get(url("/user/api"))
+    begin
+      response = RestClient::Request.execute(method: :get, url: url("/user/api"), open_timeout: 3, read_timeout: 3)
+    rescue
+      Rails.logger.debug(">> get_value_with_URI exception")
+      # No point allowing subsequent queries to block us.
+      raise "get_value_with_URI EXCEPTION"
+    end
     if response.code != 200
       Rails.logger.debug("!! api: code #{response.code}")
       return "FAIL"
@@ -18,7 +24,13 @@ class Boiler < ActiveRecord::Base
   
   def get_value_with_URI(uri)
     Rails.logger.debug("!! get_value_with_URI #{shortname} #{uri}")
-    response = RestClient.get(url("/user/var/#{uri}"))
+    begin
+      response = RestClient::Request.execute(method: :get, url: url("/user/var/#{uri}"), open_timeout: 3, read_timeout: 3)
+    rescue
+      Rails.logger.debug(">> get_value_with_URI exception")
+      # No point allowing subsequent queries to block us.
+      raise "get_value_with_URI EXCEPTION"
+    end
     if response.code != 200
       Rails.logger.debug(">> get_value_with_URI code #{response.code}")
       return "FAIL"

@@ -15,6 +15,10 @@ class Mapping < ActiveRecord::Base
       "#{v} kg"
     when 'W'
       "#{v} kW"
+    when 'B'
+      "#{v} Bar"
+    when 'P'
+      "#{v} Pa"
     when '%'
       "#{v} %"
     else

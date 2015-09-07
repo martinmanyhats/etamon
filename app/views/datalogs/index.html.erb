@@ -19,10 +19,11 @@
         <td><%= datalog.updated_at.strftime('%F %RZ') %></td>
         <td><%= datalog.boiler.shortname %></td>
         <td>
-          <% JSON.parse(datalog.dataset).each do |path, value| %>
+          <% dataset = JSON.parse(datalog.dataset) %>
+          <% dataset.keys.sort.each do |path| %>
             <div>
               <%= path %>:
-              <%= value %>
+              <%= dataset[path] %>
             </div>
           <% end %>
     	</td>

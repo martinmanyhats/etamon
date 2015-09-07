@@ -4,7 +4,15 @@ class DatalogsController < ApplicationController
   # GET /datalogs
   # GET /datalogs.json
   def index
-    @datalogs = Datalog.order(created_at: :desc).limit(100)
+    @datalogs = Datalog.all.order(created_at: :desc)
+    if params[:limit]
+      @datalogs = @datalogs.limit(params[:limit].to_i)
+    else
+      @datalogs = @datalogs.limit(100)
+    end
+    if params[:boiler_id]
+      @datalogs = @datalogs.where(boiler_id: params[:boiler_id])
+    end
   end
 
   # GET /datalogs/1
@@ -69,6 +77,6 @@ class DatalogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def datalog_params
-      params.require(:datalog).permit(:boiler_id, :values)
+      params.require(:datalog).permit(:boiler_id, :values, :limit)
     end
 end
