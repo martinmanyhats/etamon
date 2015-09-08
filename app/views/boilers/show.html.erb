@@ -1,4 +1,5 @@
-<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<%#= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+<%= javascript_include_tag "chartkick" %>
 <% title 'Boiler' %>
 <p id="notice"><%= notice %></p>
 
@@ -8,8 +9,8 @@
 </p>
 
 <p>
-  <b>API:</b>
-  <%= @boiler.api %>
+  <b>When:</b>
+  <%= Time.now.strftime("%d.%m.%Y %H:%M") %>
 </p>
 
 <p>
@@ -33,12 +34,12 @@
 	<% end %>
   </tbody>
 </table>
-<% start_date = 2.week.ago.utc %>
-<%#= line_chart @boiler.datalogs.group("DAY(created_at)").count %>
-<%= line_chart @boiler.datalogs.where('created_at > ?', start_date).map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed']]},
-    library: {title: "Wood pellet consumption (kg)"} %>
-<%= line_chart @boiler.datalogs.where('created_at > ?', start_date).map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status']]},
-    library: {title: "Charge status (%)"} %>
+<% start_date = 1.week.ago.utc %>
+<% datalogs = @boiler.datalogs.where('created_at > ?', start_date) %>
+<%= line_chart datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed'].to_i]},
+    library: {title: {text: "Wood pellet consumption (kg)"}} %>
+<%= line_chart datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status'].to_i]},
+    library: {title: {text: "Charge status (%)"}} %>
 <br />
 <%= link_to 'Edit', edit_boiler_path(@boiler) %> |
 <%= link_to 'Back', boilers_path %>
