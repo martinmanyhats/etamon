@@ -4,6 +4,16 @@ class Boiler < ActiveRecord::Base
   has_many :vars, dependent: :destroy
   has_many :datalogs, dependent: :destroy
   
+  BOILER_STATE_COLORS_MAP = {
+      'Ready' => 'blue', 'Igniting' => 'orange', 'Preheat' => 'yellow', 'Heating' => 'green',
+      'Ember burnout' => 'pink', 'Switched off' => '#ddd', 'De-ash' => 'purple', 'Fill' => 'cyan'
+  }
+  BOILER_STATE_COLORS_MAP.default = 'black'
+  
+  def self.color_for_boiler_state(state)
+    BOILER_STATE_COLORS_MAP[state]
+  end
+
   def api
     begin
       response = RestClient::Request.execute(method: :get, url: url("/user/api"), open_timeout: 3, read_timeout: 3)

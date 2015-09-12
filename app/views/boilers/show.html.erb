@@ -34,12 +34,86 @@
 	<% end %>
   </tbody>
 </table>
-<% start_date = 1.week.ago.utc %>
-<% datalogs = @boiler.datalogs.where('created_at > ?', start_date) %>
-<%= line_chart datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed'].to_i]},
+<div id='boilerchart' style="height: 600px; width: 800px;"></div>
+<%#= line_chart @datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed'].to_i]},
     library: {title: {text: "Wood pellet consumption (kg)"}} %>
-<%= line_chart datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status'].to_i]},
-    library: {title: {text: "Charge status (%)"}} %>
+<%#= line_chart @datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status'].to_i]}, library: {title: {text: "Charge status (%)"}} %>
 <br />
 <%= link_to 'Edit', edit_boiler_path(@boiler) %> |
 <%= link_to 'Back', boilers_path %>
+
+<script>
+$(function () { 
+    $('#boilerchart').highcharts({
+        chart: {
+            type: 'scatter'
+        },
+        title: {
+            text: 'Buffer'
+        },
+        plotOptions: {
+        },
+        tooltip: {
+        	formatter: function() {
+                    return  Highcharts.dateFormat('%Y.%m.%d %H:%M', new Date(this.x)) +
+                    'Z<br/>' + this.y + ' ' + this.series.options.unit + 
+                    (this.point.bs ? ' - ' + this.point.bs : '');
+                }
+        },
+        xAxis: {
+            type: 'datetime',
+            dateTimeLabelFormats: {
+                month: '%e %b',
+                year: '%b'
+           },
+           pointInterval: 24 * 3600 * 1000
+        },
+        yAxis: {
+            title: {
+                text: '%'
+            }
+        },
+        series: [
+          {
+            name: 'Boiler bottom (C)',
+            data: <%= @series[:boiler_bottom_temp].to_json.html_safe %>,
+            unit: 'C',
+            color: 'gray',
+            marker: {
+              enabled: false
+            },
+            enableMouseTracking: false,
+            lineWidth: '2px',
+            dashStyle: 'dot'
+          },
+          {
+            name: 'Buffer charge (%)',
+            data: <%= @series[:buffer_charge].to_json.html_safe %>,
+            unit: '%'
+          },
+          {
+            name: 'Buffer top (C)',
+            data: <%= @series[:buffer_top_temp].to_json.html_safe %>,
+            unit: 'C',
+            color: 'olive',
+            marker: {
+              enabled: false
+            },
+            enableMouseTracking: false,
+            lineWidth: '2px'
+          },
+          {
+            name: 'Buffer bottom (C)',
+            data: <%= @series[:buffer_bottom_temp].to_json.html_safe %>,
+            unit: 'C',
+            color: 'maroon',
+            marker: {
+              enabled: false
+            },
+            enableMouseTracking: false,
+            lineWidth: '2px'
+          }
+        ]
+    });
+});
+</script>

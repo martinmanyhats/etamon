@@ -10,6 +10,49 @@ class BoilersController < ApplicationController
   # GET /boilers/1
   # GET /boilers/1.json
   def show
+    @start_date = 1.day.ago.utc
+    @datalogs = @boiler.datalogs.where('created_at > ?', @start_date)
+    boiler_state_colors = {
+      'Ready' => 'blue', 'Ignition' => 'orange', 'Preheat' => 'yellow', 'Heating' => 'green',
+      'Ember burnout' => 'pink', 'Switched off' => '#ddd', 'De-ash' => 'purple'
+    }
+    boiler_state_colors.default = 'black'
+    @series = Hash.new
+    @series[:boiler_bottom_temp] = @datalogs.map do |d|
+      dataset = JSON.parse(d.dataset)
+      {
+        x: d.created_at.to_time.to_i * 1000,
+        y: dataset['Boiler/Boiler/Boiler bottom'].to_i
+      }
+    end
+    @series[:buffer_charge] = @datalogs.map do |d|
+      dataset = JSON.parse(d.dataset)
+      if dataset['Buffer/Buffer'] == 'Heat dissipation'
+        color = 'red'
+      else
+        color = Boiler.color_for_boiler_state(dataset['Boiler/Boiler'])
+      end
+      {
+        x: d.created_at.to_time.to_i * 1000,
+        y: dataset['Buffer/Buffer/demanded output/Charging Status'].to_i,
+        color: color,
+        bs: dataset['Boiler/Boiler']
+      }
+    end
+    @series[:buffer_top_temp] = @datalogs.map do |d|
+      dataset = JSON.parse(d.dataset)
+      {
+        x: d.created_at.to_time.to_i * 1000,
+        y: dataset['Buffer/Buffer/Buffer top'].to_i
+      }
+    end
+    @series[:buffer_bottom_temp] = @datalogs.map do |d|
+      dataset = JSON.parse(d.dataset)
+      {
+        x: d.created_at.to_time.to_i * 1000,
+        y: dataset['Buffer/Buffer/Buffer bottom'].to_i
+      }
+    end
   end
 
   # GET /boilers/new
