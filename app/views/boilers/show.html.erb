@@ -34,7 +34,7 @@
 	<% end %>
   </tbody>
 </table>
-<div id='boilerchart' style="height: 600px; width: 800px;"></div>
+<div id='boilerchart' style="height: 700px; width: 900px;"></div>
 <%#= line_chart @datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Boiler/Counters/Total consumed'].to_i]},
     library: {title: {text: "Wood pellet consumption (kg)"}} %>
 <%#= line_chart @datalogs.map {|d| [d.created_at, JSON.parse(d.dataset)['Buffer/Buffer/demanded output/Charging Status'].to_i]}, library: {title: {text: "Charge status (%)"}} %>
@@ -60,6 +60,31 @@ $(function () {
                     (this.point.bs ? ' - ' + this.point.bs : '');
                 }
         },
+        rangeSelector: {
+        	enabled: true,
+			buttons: [{
+				type: 'hour',
+				count: 2,
+				text: '2h'
+	    	}, {
+	            type: 'hour',
+	            count: 4,
+	            text: '4h'
+	    	}, {
+	            type: 'hour',
+	            count: 12,
+	            text: '12h'
+	    	}, {
+	            type: 'day',
+	            count: 1,
+	            text: '1d'
+	    	}],
+	    	inputEnabled: false,
+	    	selected: 3 // 1d
+        },
+        scrollbar: {
+        	enabled: true
+        },
         xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: {
@@ -70,8 +95,9 @@ $(function () {
         },
         yAxis: {
             title: {
-                text: '%'
-            }
+                text: '% - C'
+            },
+            max: 140
         },
         series: [
           {
@@ -83,8 +109,19 @@ $(function () {
               enabled: false
             },
             enableMouseTracking: false,
-            lineWidth: '2px',
+            lineWidth: '1px',
             dashStyle: 'dot'
+          },
+          {
+            name: 'Flue gas (C)',
+            data: <%= @series[:boiler_flue_gas_temp].to_json.html_safe %>,
+            unit: 'C',
+            color: 'pink',
+            marker: {
+              enabled: false
+            },
+            enableMouseTracking: false,
+            lineWidth: '1px'
           },
           {
             name: 'Buffer charge (%)',
