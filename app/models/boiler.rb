@@ -18,9 +18,9 @@ class Boiler < ActiveRecord::Base
     begin
       response = RestClient::Request.execute(method: :get, url: url("/user/api"), open_timeout: 3, read_timeout: 3)
     rescue
-      Rails.logger.debug(">> get_value_with_URI exception")
+      Rails.logger.debug(">> api exception")
       # No point allowing subsequent queries to block us.
-      raise "get_value_with_URI EXCEPTION"
+      raise "api EXCEPTION"
     end
     if response.code != 200
       Rails.logger.debug("!! api: code #{response.code}")
@@ -58,6 +58,25 @@ class Boiler < ActiveRecord::Base
   
   def url(path)
     "http://#{ipaddress}:#{port}#{path}"
+  end
+  
+  def rest_get(uri, default = nil, timeout = 3)
+    Rails.logger.debug("!! rest_get uri #{uri}")
+    begin
+      response = RestClient::Request.execute(method: :get, url: url(uri), open_timeout: timeout, read_timeout: timeout)
+      if response.code != 200
+        Rails.logger.debug(">> rest_get code #{response.code}")
+        return default
+      end
+      result = Nokogiri::HTML(response.to_str)
+      Rails.logger.debug("!! rest_get result #{result.inspect}")
+      return result
+    rescue => e
+      Rails.logger.debug(">> rest_get exception #{e.inspect}")
+       # No point allowing subsequent queries to block this request loop.
+      raise "rest_get EXCEPTION"
+    end
+    return default
   end
   
 end

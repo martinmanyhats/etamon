@@ -49,9 +49,12 @@ $(function () {
             type: 'scatter'
         },
         title: {
-            text: 'Buffer'
+            text: '<%= @boiler.name %>'
         },
         plotOptions: {
+        	series: {
+        		turboThreshold: 0
+        	}
         },
         tooltip: {
         	formatter: function() {
@@ -63,13 +66,9 @@ $(function () {
         rangeSelector: {
         	enabled: true,
 			buttons: [{
-				type: 'hour',
-				count: 2,
-				text: '2h'
-	    	}, {
 	            type: 'hour',
-	            count: 4,
-	            text: '4h'
+	            count: 6,
+	            text: '6h'
 	    	}, {
 	            type: 'hour',
 	            count: 12,
@@ -78,9 +77,12 @@ $(function () {
 	            type: 'day',
 	            count: 1,
 	            text: '1d'
+	    	}, {
+	            type: 'day',
+	            count: 2,
+	            text: '2d'
 	    	}],
-	    	inputEnabled: false,
-	    	selected: 3 // 1d
+	    	inputEnabled: false
         },
         scrollbar: {
         	enabled: true
@@ -97,11 +99,11 @@ $(function () {
             title: {
                 text: '% - C'
             },
-            max: 140
+            Xmax: 160
         },
         series: [
           {
-            name: 'Boiler bottom (C)',
+            name: "Boiler <%= @boiler.shortname = 'PEK45' ? 'return' : 'bottom' %> (C)",
             data: <%= @series[:boiler_bottom_temp].to_json.html_safe %>,
             unit: 'C',
             color: 'gray',

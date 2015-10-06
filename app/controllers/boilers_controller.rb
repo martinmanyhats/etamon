@@ -10,7 +10,7 @@ class BoilersController < ApplicationController
   # GET /boilers/1
   # GET /boilers/1.json
   def show
-    @start_date = 25.hour.ago.utc
+    @start_date = 49.hour.ago.utc
     @datalogs = @boiler.datalogs.where('created_at > ?', @start_date)
     boiler_state_colors = {
       'Ready' => 'blue', 'Ignition' => 'orange', 'Preheat' => 'yellow', 'Heating' => 'green',
@@ -20,9 +20,10 @@ class BoilersController < ApplicationController
     @series = Hash.new
     @series[:boiler_bottom_temp] = @datalogs.map do |d|
       dataset = JSON.parse(d.dataset)
+      value_name = @boiler.shortname == 'PEK45' ? 'Boiler/Boiler/Return' : 'Boiler/Boiler/Boiler bottom'
       {
         x: d.created_at.to_time.to_i * 1000,
-        y: dataset['Boiler/Boiler/Boiler bottom'].to_i
+        y: dataset[value_name].to_i
       }
     end
     @series[:boiler_flue_gas_temp] = @datalogs.map do |d|

@@ -121,15 +121,30 @@ class Var < ActiveRecord::Base
       response = RestClient::Request.execute(method: :get, url: boiler.url("/user/vars/#{name}"), open_timeout: 3, read_timeout: 3)
       if response.code != 200
         Rails.logger.debug(">> get_varset_data code #{response.code}")
-        return {}
+        response = nil
       end
+    rescue => e
+      Rails.logger.debug(">> get_varset_data exception #{e.inspect}")
+      # Varset might have become unset eg boiler restart, have another go
+      begin
+        update_varset
+        response = RestClient::Request.execute(method: :get, url: boiler.url("/user/vars/#{name}"), open_timeout: 3, read_timeout: 3)
+        if response.code != 200
+          Rails.logger.debug(">> get_varset_data code #{response.code}, retry failed")
+          response = nil
+        end
+      rescue => e
+        Rails.logger.debug(">> get_varset_data code #{response.code}, retry failed exception #{e.inspect}")
+        response = nil
+      end
+    end
+    if response
       result = Nokogiri::HTML(response.to_str)
       #Rails.logger.debug("!! get_varset_data result #{result.inspect}")
       return result
-    rescue => e
-      Rails.logger.debug(">> get_varset_data exception #{e.inspect}")
+    else
+      return {}
     end
-    return {}
   end
   
   def uris
