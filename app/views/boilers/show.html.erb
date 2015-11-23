@@ -104,7 +104,7 @@ $(function () {
         series: [
           {
             name: "Boiler <%= @boiler.shortname = 'PEK45' ? 'return' : 'bottom' %> (C)",
-            data: <%= @series[:boiler_bottom_temp].to_json.html_safe %>,
+            data: <%= @series[:boiler_temp].to_json.html_safe %>,
             unit: 'C',
             color: 'gray',
             marker: {

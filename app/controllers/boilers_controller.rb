@@ -18,9 +18,9 @@ class BoilersController < ApplicationController
     }
     boiler_state_colors.default = 'black'
     @series = Hash.new
-    @series[:boiler_bottom_temp] = @datalogs.map do |d|
+    @series[:boiler_temp] = @datalogs.map do |d|
       dataset = JSON.parse(d.dataset)
-      value_name = @boiler.shortname == 'PEK45' ? 'Boiler/Boiler/Return' : 'Boiler/Boiler/Boiler bottom'
+      value_name = @boiler.shortname == 'PEK45' ? 'Boiler/Boiler/Return' : 'Boiler/Boiler/Boiler'
       {
         x: d.created_at.to_time.to_i * 1000,
         y: dataset[value_name].to_i
