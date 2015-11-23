@@ -134,7 +134,7 @@ class Var < ActiveRecord::Base
           response = nil
         end
       rescue => e
-        Rails.logger.debug(">> get_varset_data code #{response.code}, retry failed exception #{e.inspect}")
+        Rails.logger.debug(">> get_varset_data code retry failed exception #{e.inspect}")
         response = nil
       end
     end
