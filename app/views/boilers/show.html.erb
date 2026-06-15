@@ -44,6 +44,14 @@
 
 <script>
 $(function () { 
+    Highcharts.setOptions({
+        chart: {
+            style: {
+                fontFamily: 'Arial, sans-serif'
+            }
+        }
+    });
+
     $('#boilerchart').highcharts({
         chart: {
             type: 'scatter'
